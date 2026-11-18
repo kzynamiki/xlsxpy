@@ -39,6 +39,10 @@ classDiagram
         +TemporaryDirectory temp_dir
         +Path path
         +list~ExcelSheet~ sheets
+
+        +list~ExcelSheet~ get_sheets()
+        +ExcelSheet | None get_sheet_by()
+        +save()
     }
 
     class ExcelSheet {
@@ -48,42 +52,51 @@ classDiagram
         +str sheet_id
         +str r_id
         +dict~str, ExcelCell~ cells
+
+        +mark_dirty()
+        +set_xml_path()
+        +ExcelCell | None get_cell()
+        +dict~str, ExcelCell~ get_row()
+        +dict~str, ExcelCell~ get_column()
     }
 
     class ExcelCell {
         <<excel_cell.py>>
         +str address
         +Any value
-        -ExcelSheet _sheet
+        -Callable~[], None~ on_change
     }
 
-    class ExcelParser {
-        <<excel_parser.py>>
+    class ExcelUtility {
+        <<excel_utility.py>>
+
+        +TemporaryDirectory extract_xlsx()
+        +compress_xlsx()
     }
 
     ExcelFile o-- "0..*" ExcelSheet : 集約
     ExcelSheet o-- "0..*" ExcelCell : 集約
     ExcelCell --> "1" ExcelSheet : 参照・dirty通知
-    ExcelParser ..> ExcelFile : 利用・変換
+    ExcelUtility ..> ExcelFile : 利用・変換
 ```
 ※2026/11/13時点
 
 ## 責務
 ### ExcelCell
 セルの要素や、番地などの情報を扱う。  
-シートのインスタンスを保持しており、更新がされた場合にシートのdirtyフラグを立てる。
+更新がされた場合にコールバックより、ExceSheetでdirtyフラグを立てる。
+
+### ExcelSheet
+シートの名前やアクティブセル、リレーションなどの情報を扱う。  
+このクラスでセルの集約を行っている。
 
 ### ExcelFile
 エクセルファイルは最終更新日や人などの情報が入っている場合があるため、その情報を扱う。  
 このクラスでExcelSheetの集約を行っている。
 
-### ExcelParser
+### ExcelUtility
 \*.xlsx形式のファイルからxmlを抽出する規定処理と、抽出したxml群を圧縮して\*.xlsx形式へ戻す処理を担う。  
 内部xmlの複雑な変換などの処理もここでまとめる。
-
-### ExcelSheet
-シートの名前やアクティブセル、リレーションなどの情報を扱う。  
-このクラスでセルの集約を行っている。
 
 ## 備考
 - リレーション周りがおそらく複雑なので、それらを処理するクラスを用意したほうがいいかもしれない。
