@@ -1,8 +1,5 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
-import re
-import xml.etree.ElementTree as ET
-import xml.dom.minidom as Minidom
 import zipfile
 import os
 
