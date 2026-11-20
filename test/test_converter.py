@@ -7,9 +7,13 @@ import core.utils.converter as Converter
 
 
 class ConverterTest(unittest.TestCase):
+    def setUp(self):
+        self.xlsx_path = Path("sample.xlsx")
+        self.temp_path = Path(".")
+
     def test_extract_and_compress(self):
         # TemporaryDirectory生成
-        result = Converter.xlsx_to_dir(Path("sample.xlsx"), Path("."))
+        result = Converter.xlsx_to_dir(self.xlsx_path, self.temp_path)
         
         # 対象がTemporaryDirectoryオブジェクトかどうか
         self.assertIsInstance(result, TemporaryDirectory)
