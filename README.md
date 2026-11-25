@@ -76,7 +76,7 @@ classDiagram
     }
 
     class Converter {
-        <<core/components/converter.py>>
+        <<core/utils/converter.py>>
 
         +TemporaryDirectory xlsx_to_dir()
         +dir_to_xlsx()
@@ -87,7 +87,7 @@ classDiagram
     ExcelCell --> "1" ExcelSheet : 参照・dirty通知
     Converter ..> ExcelFile : 利用・変換
 ```
-※2026/11/13時点
+※2026/11/25時点
 
 　
 ## 🔸責務
