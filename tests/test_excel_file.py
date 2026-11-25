@@ -3,7 +3,6 @@ import unittest
 from pathlib import Path
 
 from core.components.excel_file import ExcelFile
-from core.components.excel_sheet import ExcelSheet
 
 
 class ExcelFileTest(unittest.TestCase):
@@ -24,16 +23,16 @@ class ExcelFileTest(unittest.TestCase):
         self.assertIn("Sheet2", sheetNames)
 
         # シートの取得: 名前から
-        self.assertIsInstance(excel_file.get_sheet_by(name="Sheet1"), ExcelSheet)
-        self.assertIsInstance(excel_file.get_sheet_by(name="Sheet2"), ExcelSheet)
+        self.assertEqual(excel_file.get_sheet_by(name="Sheet1").name, "Sheet1")
+        self.assertEqual(excel_file.get_sheet_by(name="Sheet2").name, "Sheet2")
 
         # シートの取得: シートIDから
-        self.assertIsInstance(excel_file.get_sheet_by(sheet_id="1"), ExcelSheet)
-        self.assertIsInstance(excel_file.get_sheet_by(sheet_id="2"), ExcelSheet)
+        self.assertEqual(excel_file.get_sheet_by(sheet_id="1").name, "Sheet1")
+        self.assertEqual(excel_file.get_sheet_by(sheet_id="2").name, "Sheet2")
 
         # シートの取得: リレーションIDから
-        self.assertIsInstance(excel_file.get_sheet_by(r_id="rId1"), ExcelSheet)
-        self.assertIsInstance(excel_file.get_sheet_by(r_id="rId2"), ExcelSheet)
+        self.assertEqual(excel_file.get_sheet_by(r_id="rId1").name, "Sheet1")
+        self.assertEqual(excel_file.get_sheet_by(r_id="rId2").name, "Sheet2")
 
         # 実体として保存したエクセルファイルが存在しているかどうかを確認する
         excel_file.save(self.dest_excel_file_path)
